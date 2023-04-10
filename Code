@@ -1,0 +1,80 @@
+#include <iostream>
+using namespace std;
+
+char board[3][3] = { {' ', ' ', ' '}, {' ', ' ', ' '}, {' ', ' ', ' '} };
+char currentPlayer = 'X';
+
+void drawBoard() {
+    cout << "   1   2   3\n";
+    cout << "1  " << board[0][0] << " | " << board[0][1] << " | " << board[0][2] << "\n";
+    cout << "  ---+---+---\n";
+    cout << "2  " << board[1][0] << " | " << board[1][1] << " | " << board[1][2] << "\n";
+    cout << "  ---+---+---\n";
+    cout << "3  " << board[2][0] << " | " << board[2][1] << " | " << board[2][2] << "\n";
+}
+bool hasWon(char player) {
+    for (int i = 0; i < 3; i++) {
+        if (board[i][0] == player && board[i][1] == player && board[i][2] == player) {
+            return true;
+        }
+        if (board[0][i] == player && board[1][i] == player && board[2][i] == player) {
+            return true;
+        }
+    }
+    if (board[0][0] == player && board[1][1] == player && board[2][2] == player) {
+        return true;
+    }
+    if (board[0][2] == player && board[1][1] == player && board[2][0] == player) {
+        return true;
+    }
+    return false;
+}
+bool isBoardFull() {
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 3; j++) {
+            if (board[i][j] == ' ') {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+void switchPlayer() {
+    if (currentPlayer == 'X') {
+        currentPlayer = 'O';
+    }
+    else {
+        currentPlayer = 'X';
+    }
+}
+void makeMove() {
+    int row, col;
+    do {
+        cout << "Player " << currentPlayer << ", enter row (1-3): ";
+        cin >> row;
+        cout << "Player " << currentPlayer << ", enter column (1-3): ";
+        cin >> col;
+        row--;
+        col--;
+    } while (row < 0 || row > 2 || col < 0 || col > 2 || board[row][col] != ' ');
+
+    board[row][col] = currentPlayer;
+}
+int main() {
+    while (!hasWon('X') && !hasWon('O') && !isBoardFull()) {
+        drawBoard();
+        makeMove();
+        switchPlayer();
+    }
+    drawBoard();
+    if (hasWon('X')) {
+        cout << "Player X wins!\n";
+    }
+    else if (hasWon('O')) {
+        cout << "Player O wins!\n";
+    }
+    else {
+        cout << "Tie game!\n";
+    }
+    return 0;
+ }
